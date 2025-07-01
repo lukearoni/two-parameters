@@ -99,15 +99,14 @@ window.Quarto = {
 </header>
 
 
-<p>We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years.</p>
+<section id="mathematical-models" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-models">Mathematical Models</h2>
 <p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon\]</span></p>
 <p><span class="math display">\[\hat{\text{height}} = 162.18 + 15.94 \cdot \text{sexMale}\]</span></p>
+</section>
+<section id="table" class="level2">
+<h2 class="anchored" data-anchor-id="table">Table</h2>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Since gt v0.6.0 `fmt_missing()` is deprecated and will soon be removed.
-ℹ Use `sub_missing()` instead.
-This warning is displayed once every 8 hours.</code></pre>
-</div>
 <div class="cell-output-display">
 <div id="rcvjjyoumz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rcvjjyoumz table {
@@ -596,6 +595,20 @@ This warning is displayed once every 8 hours.</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="plot" class="level2">
+<h2 class="anchored" data-anchor-id="plot">Plot</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years. We model the predicted height of the USMC recruits, with an estimated intercept of 162.18 cm and an estimated 95% confidence interval for the intercept between 159.72 cm and 164.63 cm, as a linear function of gender. Our quantity of interest was the predicted average heights for the upcoming USMC recruits for males and females, which turned out to be 178.12 cm for males and 162.18 cm for females. A measure of uncertainty is our 95% confidence interval, which ranges around 2.4 cm above and below our prediction, meaning the true average could be higher or lower than what we modeled. The estimates for our quantities of interest and uncertainty might be wrong because the survey for heights could have had a response bias, where people said they were taller than they actually were. Therefore, a better estimate could actually be slightly lower.</p>
+</section>
 
 </main>
 <!-- /main column -->

@@ -5,9 +5,7 @@ author: Luke Li
 execute: 
   echo: false
 ---
-
-We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years. We model the predicted height of the USMC recruits, with an estimated intercept of 162.18 cm and an estimated 95% confidence interval for the intercept between 159.72 cm and 164.63 cm, as a linear function of gender.
-
+## Mathematical Models
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
 
 $$\hat{\text{height}} = 162.18 + 15.94 \cdot \text{sexMale}$$
@@ -18,6 +16,7 @@ library(tidyverse)
 library(primer.data)
 library(tidymodels)
 library(broom)
+library(marginaleffects)
 ```
 
 ```{r}
@@ -36,7 +35,9 @@ fit_height <- linear_reg() |>
   fit(height ~ sex, data = x)
 ```
 
+## Table
 ```{r}
+#| warning: false
 library(gt)
 
 tidy(fit_height, conf.int = TRUE) |>
@@ -61,3 +62,39 @@ tidy(fit_height, conf.int = TRUE) |>
   ) |>
   fmt_missing(everything(), missing_text = "–")
 ```
+
+## Plot
+```{r}
+# Create the data frame
+df <- tibble(
+  sex = c("Female", "Male"),
+  estimate = c(163.7133, 177.6743),
+  conf.low = c(159.8367, 175.1365),
+  conf.high = c(167.5899, 180.2121)
+)
+
+# Plot
+ggplot(df, aes(x = sex, y = estimate, fill = sex)) +
+  geom_col(width = 0.6, show.legend = FALSE) +  # Bars
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) +  # Error bars
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +  # No clipping
+  coord_cartesian(ylim = c(155, 185)) +  # Zoom in without dropping data
+  scale_fill_manual(values = c("Female" = "#FF69B4", "Male" = "#1E90FF")) +
+  labs(
+    title = "Estimated Average Height by Sex",
+    subtitle = "On average, males are estimated to be ~14 cm taller than females.",
+    x = NULL,
+    y = "Estimated Height (cm)",
+    caption = "Data source: Modeled regression output"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", family = "Times New Roman", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
+    plot.caption = element_text(size = 9, hjust = 0),
+    axis.text = element_text(color = "gray20"),
+    axis.title.y = element_text(margin = margin(r = 10))
+  )
+```
+
+We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years. We model the predicted height of the USMC recruits, with an estimated intercept of 162.18 cm and an estimated 95% confidence interval for the intercept between 159.72 cm and 164.63 cm, as a linear function of gender. Our quantity of interest was the predicted average heights for the upcoming USMC recruits for males and females, which turned out to be 178.12 cm for males and 162.18 cm for females. A measure of uncertainty is our 95% confidence interval, which ranges around 2.4 cm above and below our prediction, meaning the true average could be higher or lower than what we modeled. The estimates for our quantities of interest and uncertainty might be wrong because the survey for heights could have had a response bias, where people said they were taller than they actually were. Therefore, a better estimate could actually be slightly lower.
