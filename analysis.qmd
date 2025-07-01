@@ -2,5 +2,24 @@
 title: "Two-Parameters"
 format: html
 author: Luke Li
+execute: 
+  echo: false
 ---
 
+We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(primer.data)
+```
+
+```{r}
+set.seed(10)
+
+x <- nhanes |>
+  filter(age >= 18 & age <= 27) |>
+  select(height, sex) |>
+  drop_na() |>
+  slice_sample(n = 50) 
+```
