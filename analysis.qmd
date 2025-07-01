@@ -6,7 +6,7 @@ execute:
   echo: false
 ---
 
-We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years.
+We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years. We model the predicted height of the USMC recruits, with an estimated intercept of 162.18 cm and an estimated 95% confidence interval for the intercept between 159.72 cm and 164.63 cm, as a linear function of gender.
 
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
 
@@ -34,4 +34,30 @@ x <- nhanes |>
 #| cache: true
 fit_height <- linear_reg() |> 
   fit(height ~ sex, data = x)
+```
+
+```{r}
+library(gt)
+
+tidy(fit_height, conf.int = TRUE) |>
+  select(term, estimate, conf.low, conf.high, p.value) |>
+  mutate(
+    estimate = round(estimate, 2),
+    conf.low = round(conf.low, 2),
+    conf.high = round(conf.high, 2),
+    p.value = signif(p.value, 2)
+  ) |>
+  gt() |>
+  cols_label(
+    term = "Term",
+    estimate = "Estimate",
+    conf.low = "Lower 95% CI",
+    conf.high = "Upper 95% CI",
+    p.value = "P-value"
+  ) |>
+  tab_header(
+    title = "Regression Coefficients",
+    subtitle = "Model: Height ~ Sex"
+  ) |>
+  fmt_missing(everything(), missing_text = "–")
 ```
