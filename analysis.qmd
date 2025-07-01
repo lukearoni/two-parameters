@@ -6,12 +6,18 @@ execute:
   echo: false
 ---
 
-We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits.
+We often try to use data to predict the future. Through the use of data from the National Health and Nutrition Examination Survey conducted from 2009 to 2011 by the CDC, we will try to predict the average male and female heights of next years recruits. A potential weakness in our model is the fact that there is a lack of stability as the preceptor table includes data only regarding the upcoming year, while the population data includes information from the past 20 years. Factors like nutrition and vitamins could have influenced average heights throughout those years.
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
+
+$$\hat{\text{height}} = 162.18 + 15.94 \cdot \text{sexMale}$$
 
 ```{r}
 #| message: false
 library(tidyverse)
 library(primer.data)
+library(tidymodels)
+library(broom)
 ```
 
 ```{r}
@@ -22,4 +28,10 @@ x <- nhanes |>
   select(height, sex) |>
   drop_na() |>
   slice_sample(n = 50) 
+```
+
+```{r}
+#| cache: true
+fit_height <- linear_reg() |> 
+  fit(height ~ sex, data = x)
 ```
